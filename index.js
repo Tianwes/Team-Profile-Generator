@@ -1,7 +1,12 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
-
-const generateHTML = (answers) =>
+const path = require("path");
+const Manager = require("./lib/Manager");
+const team = [];
+const outPutFolder = path.resolve(__dirname, "output");
+const htmlFile = path.join(outPutFolder, "team.html");
+const writeCard = require("./src/template")
+const generateHTML = (answers) => {
 `
 <!DOCTYPE html>
 <html lang="en">
@@ -53,8 +58,8 @@ const generateHTML = (answers) =>
                     <button type="button" class="btn btn-light border w-75 mt-3">ID</button>
                     <button type="button" class="btn btn-light border w-75">EMAIL</button>
                     <button type="button" class="btn btn-light border w-75 mb-3">OFFICE #</button>
-                </div>
-            </div>
+          </div>
+            </div>      
         </div>
     </div>
     <div class="row text-center my-4 justify-content-center">
@@ -91,39 +96,119 @@ const generateHTML = (answers) =>
 </html>
 
 `
-inquirer.prompt([
-    {
-        type: "input",
-        message: "Please type in the manager's name",
-        name: "managersName"
-    },
-    {
-        type: "input",
-        message: "Manager's employee ID",
-        name: "managersID"
-    },
-    {
-        type: "input",
-        message: "Manager's email",
-        name: "managersEmail"
-    },
-    {
-        type: "input",
-        message: "Manager's office phone number",
-        name: "managersPhone"
-    },
-    {
-        type: "list",
-        message: "Select a team-member role for next team-member card",
-        choices:["Engineer", "Intern"],
-        name:"nextEmployeeRole",
-        // when: function(){ }
-    },
-    {
-       type: "input",
-       message: "Please type in team-member's name",
-       name: "employee1name"
-    },
+};
+
+const askManager = () => {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Please type in the manager's name",
+            name: "managersName"
+        },
+        {
+            type: "input",
+            message: "Manager's employee ID",
+            name: "managersID"
+        },
+        {
+            type: "input",
+            message: "Manager's email",
+            name: "managersEmail"
+        },
+        {
+            type: "input",
+            message: "Manager's office phone number",
+            name: "managersPhone"
+        }]).then(answers => {
+            console.log(answers);
+            const manager = new Manager(answers.managersName, answers.managersID, answers.managersEmail, answers.managersPhone);
+            console.log(manager);
+            team.push(manager);
+            mainMenu();
+        })
+}
+const askEngineer = () => {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Please type in the Engineer's name",
+            name: "EngineersName"
+        },
+        {
+            type: "input",
+            message: "Engineer's employee ID",
+            name: "EngineersID"
+        },
+        {
+            type: "input",
+            message: "Engineer's email",
+            name: "EngineersEmail"
+        },
+        {
+            type: "input",
+            message: "Engineer's GitHub page",
+            name: "EngineersGithub"
+        }]).then(answers => {
+            console.log(answers);
+            mainMenu();
+        })
+}
+const askIntern = () => {
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Please type in the Intern's name",
+            name: "InternsName"
+        },
+        {
+            type: "input",
+            message: "Intern's employee ID",
+            name: "InternsID"
+        },
+        {
+            type: "input",
+            message: "Intern's email",
+            name: "InternsEmail"
+        },
+        {
+            type: "input",
+            message: "Intern's GitHub page",
+            name: "InternsGithub"
+        }]).then(answers => {
+            console.log(answers);
+            mainMenu();
+        })
+}
+askManager();
+
+const mainMenu = () => {
+    inquirer.prompt ([
+        {
+            type: "list",
+            message: "Select a team-member role for next team-member card",
+            choices:["Engineer", "Intern", "Finished building team"],
+            name:"nextEmployeeRole",
+          
+        }
+    ]).then(answers => {
+        if(answers.nextEmployeeRole === "Engineer"){
+            askEngineer();
+        }
+        if(answers.nextEmployeeRole === "Intern"){
+            askIntern();
+        }
+        if(answers.nextEmployeeRole === "Finished building team"){
+            buildTeam();
+        }
+    })
+}
+    function buildTeam(){
+        if(!fs.existsSync(outPutFolder)){
+            fs.mkdirSync(outPutFolder)
+        }
+        fs.writeFile(htmlFile, writeCard(team), "utf-8")
+    }
+  
     // {
     //     type: "input",
     //     message: "Manager's name",
@@ -139,14 +224,14 @@ inquirer.prompt([
     //     message: "Manager's name",
     //     name: "managersName"
     // },
-]).then((answers) => {
+// ]).then((answers) => {
     // function() {
 
     // }
 
-    const htmlContent = generateHTML(answers);
+//     const htmlContent = generateHTML(answers);
 
-    fs.writeFile("index.html", htmlContent, (err) => {
-        err ? console.error(err) : console.log("Your html page has been written :)")
-    })
-})
+//     fs.writeFile("index.html", htmlContent, (err) => {
+//         err ? console.error(err) : console.log("Your html page has been written :)")
+//     })
+// })

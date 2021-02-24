@@ -1,9 +1,9 @@
-const Manager = require("../manager"); 
+const Manager = require("../lib/Manager"); 
 
 describe("Manager", () => {
     describe("Name", () => {
         it("should ask user to put in manager's name", () => {
-            const name = "Mike";
+            const name = "Alice";
 
             const obj = new Manager(name);
 
