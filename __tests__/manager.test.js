@@ -1,13 +1,12 @@
 const Manager = require("../lib/Manager"); 
 
 describe("Manager", () => {
-    describe("Name", () => {
+    describe("name", () => {
         it("should ask user to put in manager's name", () => {
-            const name = "Alice";
-
+            const name= "Sara"
             const obj = new Manager(name);
 
-            expect(obj.name).toEqual(name);
+            expect(obj).toEqual(name);
 
         })
     })
