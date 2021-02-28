@@ -127,7 +127,6 @@ const askManager = () => {
         }]).then((answers) => {
             // New manager obj is created
             const manager = new Manager(answers.managersName, answers.managersID, answers.managersEmail, answers.managersPhone);
-            console.log(manager);
             // Push new manager obj to team array
             team.push(manager);
             mainMenu();
@@ -154,7 +153,7 @@ const askEngineer = () => {
             type: "input",
             message: "Engineer's GitHub page",
             name: "EngineersGithub"
-        }]).then(answers => {
+        }]).then((answers) => {
             console.log(answers);
             const engineer = new Engineer(answers.EngineersName, answers.EngineersID, answers.EngineersEmail, answers.EngineersGithub);
             team.push(engineer);
@@ -180,13 +179,14 @@ const askIntern = () => {
         },
         {
             type: "input",
-            message: "Intern's schhol name",
+            message: "Intern's school name",
             name: "InternsSchool"
-        }]).then(answers => {
+        }]).then((answers) => {
             const intern = new Intern(answers.InternsName, answers.InternsID, answers.InternsEmail, answers.InternsSchool);
             team.push(intern);
             mainMenu();
         })
+        console.log(team)
 }
 
 askManager();
@@ -236,7 +236,7 @@ function buildTeam() {
 
 
     fs.writeFile("index.html", html + testing, (err) => {
-        err ? console.error(err) : console.log("Your README has been written :)")
+        err ? console.error(err) : console.log("Your index.html has been created :)")
     })
 
 }
